@@ -394,6 +394,8 @@ GameObject:
   - component: {fileID: 533412786}
   - component: {fileID: 533412785}
   - component: {fileID: 533412787}
+  - component: {fileID: 533412788}
+  - component: {fileID: 533412789}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -456,6 +458,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputReader
   controls: {fileID: -944628639613478452, guid: 8aee4e943ee0c3c4e96dae16cb16d251, type: 3}
   actionMapName: Player
+--- !u!114 &533412788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533412784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb494b41f066ffc4e99f6af554929ccd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  moveSpeed: 8
+  groundAcceleration: 60
+  airAcceleration: 20
+  jumpHeight: 1.5
+  gravity: -25
+--- !u!114 &533412789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533412784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3b0584f0488554f88a134154486766, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerLook
+  cameraTransform: {fileID: 330585546}
+  sensitivity: 0.1
+  maxLookAngle: 85
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
