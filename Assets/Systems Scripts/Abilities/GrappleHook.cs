@@ -24,6 +24,8 @@ public class GrappleHook : MonoBehaviour
     public bool IsAttached { get; private set; }
     public bool IsActive => IsFiring || IsAttached;
     public Vector3 AnchorPoint { get; private set; }
+    
+    public Vector3 AnchorNormal { get; private set; }
 
     public event Action Attached;
     public event Action Released;
@@ -47,6 +49,7 @@ public class GrappleHook : MonoBehaviour
             return false;
 
         AnchorPoint = hit.point;
+        AnchorNormal = hit.normal;
         fireRoutine = StartCoroutine(FireRoutine());
         return true;
     }
