@@ -2,6 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInputReader))]
+[RequireComponent(typeof(GrappleHook))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Speed")]
@@ -19,6 +20,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashCooldown = 0.8f;
     [SerializeField, Range(0f, 1f)] private float dashExitMomentum = 0.6f;
 
+    [Header("Grapple")]
+    [SerializeField] private float grapplePullSpeed = 30f;
+    [SerializeField] private float grapplePullAcceleration = 90f;
+    [SerializeField] private float grappleStopDistance = 2.5f;
+
     // Read-only access to settings for the states
     public float GroundAcceleration => groundAcceleration;
     public float AirAcceleration => airAcceleration;
@@ -26,10 +32,14 @@ public class PlayerController : MonoBehaviour
     public float DashDuration => dashDuration;
     public float DashCooldown => dashCooldown;
     public float DashExitMomentum => dashExitMomentum;
+    public float GrapplePullSpeed => grapplePullSpeed;
+    public float GrapplePullAcceleration => grapplePullAcceleration;
+    public float GrappleStopDistance => grappleStopDistance;
 
     // Shared data the states read and write
     public CharacterController Controller { get; private set; }
     public PlayerInputReader InputReader { get; private set; }
+    public GrappleHook Hook { get; private set; }
     public Vector3 HorizontalVelocity { get; set; }
     public float VerticalVelocity { get; set; }
     public float NextDashTime { get; set; }
@@ -41,16 +51,19 @@ public class PlayerController : MonoBehaviour
     public PlayerGroundedState Grounded { get; private set; }
     public PlayerAirborneState Airborne { get; private set; }
     public PlayerDashingState Dashing { get; private set; }
+    public PlayerGrappleState Grapple { get; private set; }
 
     private void Awake()
     {
         Controller = GetComponent<CharacterController>();
         InputReader = GetComponent<PlayerInputReader>();
+        Hook = GetComponent<GrappleHook>();
 
         Machine = new StateMachine<PlayerController>(this);
         Grounded = new PlayerGroundedState();
         Airborne = new PlayerAirborneState();
         Dashing = new PlayerDashingState();
+        Grapple = new PlayerGrappleState();
     }
 
     private void Start()
@@ -60,6 +73,14 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // The grapple can start from the ground or the air, but not mid-dash
+        bool canStartGrapple = Machine.Current == Grounded || Machine.Current == Airborne;
+        if (canStartGrapple && InputReader.GrapplePressed && Hook.TryFire())
+        {
+            Machine.ChangeState(Grapple);
+            return;
+        }
+
         Machine.Tick();
     }
 

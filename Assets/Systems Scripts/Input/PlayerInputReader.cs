@@ -15,11 +15,13 @@ public class PlayerInputReader : MonoBehaviour
     private InputAction lookAction;
     private InputAction jumpAction;
     private InputAction dashAction;
+    private InputAction grappleAction;
 
     public Vector2 Move => moveAction.ReadValue<Vector2>();
     public Vector2 Look => lookAction.ReadValue<Vector2>();
     public bool JumpPressed => jumpAction.WasPressedThisFrame();
     public bool DashPressed => dashAction.WasPressedThisFrame();
+    public bool GrapplePressed => grappleAction.WasPressedThisFrame();
 
     private void Awake()
     {
@@ -28,6 +30,7 @@ public class PlayerInputReader : MonoBehaviour
         lookAction = map.FindAction("Look", true);
         jumpAction = map.FindAction("Jump", true);
         dashAction = map.FindAction("Dash", true);
+        grappleAction = map.FindAction("Grapple", true);
     }
 
     private void OnEnable() => map.Enable();
